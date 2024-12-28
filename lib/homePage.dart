@@ -102,11 +102,27 @@ class _HomePageState extends State<HomePage> {
                                       fontSize: 20,
                                       fontWeight: FontWeight.w400),
                                 ),
-                                trailing: IconButton(
-                                    onPressed: () {
-                                      showAddDialog(docID: docID);
-                                    },
-                                    icon: Icon(Icons.settings)),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                        onPressed: () {
+                                          showAddDialog(docID: docID);
+                                        },
+                                        icon: Icon(
+                                          Icons.edit,
+                                          size: 32,
+                                        )),
+                                    IconButton(
+                                        onPressed: () {
+                                          firestoreservice.deleteData(docID);
+                                        },
+                                        icon: Icon(
+                                          Icons.delete_forever_outlined,
+                                          size: 32,
+                                        ))
+                                  ],
+                                ),
                               ),
                             ),
                           );
