@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, prefer_const_constructors_in_immutables
+
 import 'package:fire_exercises/components/myButton.dart';
 import 'package:fire_exercises/components/textField.dart';
 import 'package:fire_exercises/helperFunctions/messageForUser.dart';
@@ -22,35 +24,53 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController passwordRepeatController = TextEditingController();
 
   void registerUser() async {
-    showDialog(
-        context: context,
-        builder: (context) =>
-            //circular indicator
-            const Center(child: CircularProgressIndicator()));
+    if (emailController.text.isEmpty ||
+        nameController.text.isEmpty ||
+        passwordController.text.isEmpty) {
+      displayErrorToUser(context, "All fields must be filled in !!!");
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) =>
+              //circular indicator
+              const Center(child: CircularProgressIndicator()));
+    }
+
     //make sure password
     if (passwordController.text != passwordRepeatController.text) {
       //circular progress
       Navigator.pop(context);
       //show error
       displayErrorToUser(context, 'Check the passwords ;)');
-    }
-//try creating the user
-    try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: emailController.text, password: passwordController.text);
-      Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
+    } else {
+      //try creating the user
+      try {
+        // ignore: unused_local_variable
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: emailController.text, password: passwordController.text);
         Navigator.pop(context);
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
+
+        nameController.clear();
+        emailController.clear();
+        passwordController.clear();
+        passwordRepeatController.clear();
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          Navigator.pop(context);
+          displayErrorToUser(context, 'The password provided is too weak.');
+        } else if (e.code == 'email-already-in-use') {
+          Navigator.pop(context);
+          displayErrorToUser(
+              context, 'The account already exists for that email.');
+        } else if (e.code == 'invalid-email') {
+          Navigator.pop(context);
+          displayErrorToUser(context, 'Invalid email');
+        }
+      } catch (e) {
         Navigator.pop(context);
-        print('The account already exists for that email.');
+        // ignore: avoid_print
+        print(e);
       }
-    } catch (e) {
-      Navigator.pop(context);
-      print(e);
     }
   }
 

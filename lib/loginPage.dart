@@ -1,6 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:fire_exercises/components/myButton.dart';
 import 'package:fire_exercises/components/textField.dart';
+import 'package:fire_exercises/helperFunctions/messageForUser.dart';
+import 'package:fire_exercises/homePage.dart';
 import 'package:fire_exercises/registerPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -13,7 +19,57 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  void logIn() {}
+  void logIn() async {
+    //Check if fields are filled in
+    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+      displayErrorToUser(context, 'All fields must be filled in !!!');
+      return;
+    } else {
+      //show cirular Progress indictor
+
+      showDialog(
+          context: context,
+          builder: (context) => Center(child: CircularProgressIndicator()));
+    }
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text);
+      if (context.mounted) {
+        Navigator.pop(context);
+      }
+      emailController.clear();
+      passwordController.clear();
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        displayErrorToUser(context, 'No user found for that email.');
+
+        Navigator.pop(context);
+      } else if (e.code == 'wrong-password') {
+        displayErrorToUser(context, 'Wrong password provided for that user.');
+
+        Navigator.pop(context);
+      } else if (e.code == 'invalid-email') {
+        Navigator.pop(context);
+        displayErrorToUser(context, 'Invalid email.');
+      } else if (e.message?.contains('malformed or has expired') == true) {
+        Navigator.pop(context);
+        displayErrorToUser(
+            context, 'Authentication failed. Please check your credentials.');
+      } else if (e.code == 'user-disabled') {
+        Navigator.pop(context);
+        // Obsługuje przypadek, gdy konto zostało dezaktywowane
+        displayErrorToUser(
+            context, 'The user account has been disabled by an administrator.');
+      }
+    } catch (e) {
+      Navigator.pop(context);
+      displayErrorToUser(
+          context, 'Please check your credentials and try again.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
