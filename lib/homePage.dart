@@ -1,5 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fire_exercises/firestoreService.dart';
+import 'package:fire_exercises/loginPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,8 +23,17 @@ class _HomePageState extends State<HomePage> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              backgroundColor: Colors.greenAccent[100],
+              backgroundColor: Theme.of(context).colorScheme.surface,
               content: TextField(
+                cursorColor: Theme.of(context).colorScheme.inversePrimary,
+                decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color:
+                                Theme.of(context).colorScheme.inversePrimary)),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.secondary))),
                 controller: textController,
               ),
               actions: [
@@ -49,21 +62,41 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.greenAccent[100],
+      backgroundColor: Theme.of(context).colorScheme.surface,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showAddDialog();
         },
         child: Icon(
           Icons.add,
-          color: Colors.greenAccent[400],
+          color: Theme.of(context).colorScheme.primary,
           size: 36,
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       appBar: AppBar(
-        backgroundColor: Colors.greenAccent[400],
-        title: Center(child: Text('Fire Notes')),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        title: Text(
+          'Fire Notes',
+          style: TextStyle(fontSize: 26),
+        ),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                    (Route<dynamic> route) => false);
+              },
+              icon: Icon(
+                Icons.logout,
+                color: Theme.of(context).colorScheme.inversePrimary,
+                size: 34,
+              )),
+        ],
       ),
       body: Container(
           margin: EdgeInsets.all(10),
@@ -93,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 5.0),
                             child: Card(
-                              color: Colors.greenAccent[400],
+                              color: Theme.of(context).colorScheme.secondary,
                               elevation: 8,
                               child: ListTile(
                                 title: Text(
@@ -112,6 +145,9 @@ class _HomePageState extends State<HomePage> {
                                         icon: Icon(
                                           Icons.edit,
                                           size: 32,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .inversePrimary,
                                         )),
                                     IconButton(
                                         onPressed: () {
@@ -120,6 +156,9 @@ class _HomePageState extends State<HomePage> {
                                         icon: Icon(
                                           Icons.delete_forever_outlined,
                                           size: 32,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .inversePrimary,
                                         ))
                                   ],
                                 ),

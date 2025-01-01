@@ -1,3 +1,4 @@
+import 'package:fire_exercises/helperFunctions/auhFunc.dart';
 import 'package:fire_exercises/loginPage.dart';
 import 'package:fire_exercises/theme/dark_mode.dart';
 import 'package:fire_exercises/theme/light_mode.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: AuthFunc(),
       theme: lightMode,
       darkTheme: darkMode,
     );
