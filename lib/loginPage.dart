@@ -6,7 +6,7 @@ import 'package:fire_exercises/helperFunctions/messageForUser.dart';
 import 'package:fire_exercises/homePage.dart';
 import 'package:fire_exercises/registerPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {

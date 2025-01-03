@@ -6,6 +6,8 @@ import 'package:fire_exercises/loginPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'components/myDrawer.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -62,17 +64,18 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: MyDrawer(),
       backgroundColor: Theme.of(context).colorScheme.surface,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showAddDialog();
         },
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         child: Icon(
           Icons.add,
           color: Theme.of(context).colorScheme.primary,
           size: 36,
         ),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -81,7 +84,7 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(fontSize: 26),
         ),
         centerTitle: true,
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: true,
         actions: [
           IconButton(
               onPressed: () async {
