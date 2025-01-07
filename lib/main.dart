@@ -1,10 +1,14 @@
 import 'package:fire_exercises/helperFunctions/auhFunc.dart';
+import 'package:fire_exercises/homePage.dart';
+import 'package:fire_exercises/loginPage.dart';
 
 import 'package:fire_exercises/theme/dark_mode.dart';
 import 'package:fire_exercises/theme/light_mode.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';
+import 'profilePage.dart';
+import 'usersPage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +27,12 @@ class MyApp extends StatelessWidget {
       home: AuthFunc(),
       theme: lightMode,
       darkTheme: darkMode,
+      routes: {
+        'profile page': (context) => ProfilePage(),
+        'login page': (context) => LoginPage(),
+        'home page': (context) => HomePage(),
+        'users page': (context) => UsersPage(),
+      },
     );
   }
 }

@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, prefer_const_constructors_in_immutables
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fire_exercises/components/myButton.dart';
 import 'package:fire_exercises/components/textField.dart';
 import 'package:fire_exercises/helperFunctions/messageForUser.dart';
@@ -46,9 +47,14 @@ class _RegisterPageState extends State<RegisterPage> {
       //try creating the user
       try {
         // ignore: unused_local_variable
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: emailController.text, password: passwordController.text);
-        Navigator.pop(context);
+        UserCredential? userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: emailController.text, password: passwordController.text);
+
+        //Create a user in the database
+        createUserDocument(userCredential);
+
+        if (context.mounted) Navigator.pop(context);
 
         nameController.clear();
         emailController.clear();
@@ -71,6 +77,19 @@ class _RegisterPageState extends State<RegisterPage> {
         // ignore: avoid_print
         print(e);
       }
+    }
+  }
+
+  //Create a user Document
+  Future<void> createUserDocument(UserCredential userCredential) async {
+    if (userCredential != null && userCredential.user != null) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.email)
+          .set({
+        'userName': nameController.text,
+        'email': emailController.text,
+      });
     }
   }
 

@@ -85,21 +85,6 @@ class _HomePageState extends State<HomePage> {
         ),
         centerTitle: true,
         automaticallyImplyLeading: true,
-        actions: [
-          IconButton(
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut();
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                    (Route<dynamic> route) => false);
-              },
-              icon: Icon(
-                Icons.logout,
-                color: Theme.of(context).colorScheme.inversePrimary,
-                size: 34,
-              )),
-        ],
       ),
       body: Container(
           margin: EdgeInsets.all(10),
