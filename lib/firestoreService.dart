@@ -1,13 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Firestoreservice {
   //get collection
   final CollectionReference notes =
       FirebaseFirestore.instance.collection('notes');
 
+  User? user = FirebaseAuth.instance.currentUser;
+
   //CREATE DATA
   Future<void> addNote(String note) {
-    return notes.add({'note': note, 'timeStamp': Timestamp.now()});
+    return notes.add(
+        {'note': note, 'timeStamp': Timestamp.now(), 'userEmail': user!.email});
   }
 
   //READ DATA
@@ -21,9 +25,11 @@ class Firestoreservice {
   //UPDATE
 
   Future<void> updateData(String docID, String newNote) {
-    return notes
-        .doc(docID)
-        .update({'note': newNote, 'timeStamp': Timestamp.now()});
+    return notes.doc(docID).update({
+      'note': newNote,
+      'timeStamp': Timestamp.now(),
+      'userEmail': user!.email
+    });
   }
 
   //DELETE

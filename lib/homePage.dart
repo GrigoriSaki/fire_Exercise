@@ -79,9 +79,19 @@ class _HomePageState extends State<HomePage> {
       ),
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        title: Text(
-          'Fire Notes',
-          style: TextStyle(fontSize: 26),
+        title: Row(
+          children: [
+            SizedBox(width: 60),
+            Text(
+              'Fire Notes',
+              style: TextStyle(fontSize: 26),
+            ),
+            Icon(
+              Icons.local_fire_department_outlined,
+              size: 34,
+              color: Colors.orange,
+            )
+          ],
         ),
         centerTitle: true,
         automaticallyImplyLeading: true,
@@ -109,6 +119,7 @@ class _HomePageState extends State<HomePage> {
                           Map<String, dynamic> data =
                               document.data() as Map<String, dynamic>;
                           String noteText = data['note'];
+                          String userEmail = data['userEmail'];
 
                           //display as a listTile
                           return Padding(
@@ -123,6 +134,7 @@ class _HomePageState extends State<HomePage> {
                                       fontSize: 20,
                                       fontWeight: FontWeight.w400),
                                 ),
+                                subtitle: Text(userEmail),
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [

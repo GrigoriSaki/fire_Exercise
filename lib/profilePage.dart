@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fire_exercises/components/myBackArrow.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -17,23 +18,6 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        automaticallyImplyLeading: true,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Profile'),
-            SizedBox(
-              width: 20,
-            ),
-            Icon(
-              Icons.person_outline,
-              size: 34,
-            ),
-          ],
-        ),
-      ),
       body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
           future: getUserDetails(),
           builder: (context, snapshot) {
@@ -54,11 +38,46 @@ class ProfilePage extends StatelessWidget {
               return Center(
                 child: Column(
                   children: [
-                    Text('User Name: ${user['userName']}'),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 25,
+                        ),
+                        Mybackarrow(),
+                      ],
+                    ),
                     SizedBox(
                       height: 50,
                     ),
-                    Text("User Email: ${user['email']}")
+                    Container(
+                      height: 150,
+                      width: 150,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Theme.of(context).colorScheme.secondary),
+                      child: Icon(Icons.person_outline, size: 100),
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    Text(
+                      ' ${user['userName']}',
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      "${user['email']}",
+                      style: TextStyle(
+                          fontSize: 19,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.grey[600]),
+                    )
                   ],
                 ),
               );
