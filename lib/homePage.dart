@@ -19,6 +19,7 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController textController = TextEditingController();
   final TextEditingController EditTextController = TextEditingController();
   Firestoreservice firestoreservice = Firestoreservice();
+  String userName = '';
 
 //This is ADD and UPDATE/Edit dialog:
   void showAddDialog({String? docID}) {
@@ -40,11 +41,13 @@ class _HomePageState extends State<HomePage> {
               ),
               actions: [
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    userName = await firestoreservice.getUserName();
                     if (docID == null) {
-                      firestoreservice.addNote(textController.text);
+                      firestoreservice.addNote(textController.text, userName);
                     } else {
-                      firestoreservice.updateData(docID, textController.text);
+                      firestoreservice.updateData(
+                          docID, textController.text, userName);
                     }
                     textController.clear();
                     Navigator.pop(context);
@@ -119,7 +122,6 @@ class _HomePageState extends State<HomePage> {
                           Map<String, dynamic> data =
                               document.data() as Map<String, dynamic>;
                           String noteText = data['note'];
-                          String userEmail = data['userEmail'];
 
                           //display as a listTile
                           return Padding(
@@ -131,10 +133,14 @@ class _HomePageState extends State<HomePage> {
                                 title: Text(
                                   noteText,
                                   style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 22,
                                       fontWeight: FontWeight.w400),
                                 ),
-                                subtitle: Text(userEmail),
+                                subtitle: Text(
+                                    data['userName'] ?? 'unknown user',
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w300)),
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [

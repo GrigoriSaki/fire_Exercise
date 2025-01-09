@@ -33,6 +33,7 @@ class ProfilePage extends StatelessWidget {
               );
             } else if (snapshot.hasData) {
               Map<String, dynamic> user = snapshot.data!.data()!;
+              String userName = user['userName'];
 
               //Display user details
               return Center(
@@ -64,7 +65,7 @@ class ProfilePage extends StatelessWidget {
                       height: 25,
                     ),
                     Text(
-                      ' ${user['userName']}',
+                      userName,
                       style:
                           TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                     ),
